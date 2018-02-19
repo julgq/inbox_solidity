@@ -17,7 +17,7 @@ beforeEach(async () => {
     inbox = await new web3.eth.Contract(JSON.parse(interface))
       .deploy({
         data: bytecode,
-        arguments: ['Hi there!']
+        arguments: ['Hi there!'] // Argumentos que necesita el constructor string initialMessage
       })
       .send({ from: accounts[0], gas: '1000000' });
   });
@@ -25,6 +25,8 @@ beforeEach(async () => {
 
 describe('Inbox', () => {
     it('deploys a contract', () => {
-        console.log(inbox);
+        //assert function is a native npm, to validate the propertie have value.
+        console.log(inbox.options.address)
+        assert.ok(inbox.options.address);
     });
 });
