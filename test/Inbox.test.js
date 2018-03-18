@@ -11,6 +11,8 @@ let inbox;
 beforeEach(async () => {
     // Get a list of all accounts
     accounts = await web3.eth.getAccounts();
+    console.log(accounts);
+    
   
     // Use one of those accounts to deploy
     // the contract
@@ -20,7 +22,10 @@ beforeEach(async () => {
         arguments: ['Hi there!'] // Argumentos que necesita el constructor string initialMessage
       })
       .send({ from: accounts[0], gas: '1000000' });
+
   });
+
+  
   
 
 describe('Inbox', () => {
@@ -28,5 +33,16 @@ describe('Inbox', () => {
         //assert function is a native npm, to validate the propertie have value.
         console.log(inbox.options.address)
         assert.ok(inbox.options.address);
+    });
+
+    it('has a default message', async () => {
+        const message = await inbox.methods.message().call();
+        assert.equal(message, 'Hi there!');
+    });
+
+    it('can change the message', async () => {
+        await inbox.methods.setMessage('bye').send({ from: accounts[0] })
+        const message = await inbox.methods.message().call();
+        assert.equal(message, 'bye');
     });
 });
